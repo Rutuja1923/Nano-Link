@@ -18,7 +18,16 @@ const urlSchema  = new Schema(
                 timeStamp: {
                     type: Date,
                     default: () => new Date(),
-                }
+                },
+                ipAddress:{
+                    type: String,
+                },
+                device: {
+                    type: String,
+                },
+                browser: {
+                    type: String,
+                },
             }
         ],
     },
