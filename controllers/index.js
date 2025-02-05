@@ -1,4 +1,5 @@
 const {nanoid} = require('nanoid');
+const UAParser = require('ua-parser-js');
 const URL = require('../models/Url');
 
 async function handleGenerateNewShortURL(req,res) {
@@ -44,12 +45,18 @@ async function handleGenerateNewShortURL(req,res) {
 async function handleRedirectShortURL(req,res) {
     try {
         const shortID = req.params.id;
+        const parser = new UAParser(req.headers['user-agent']);
+        const result = parser.getResult();
+
         const entry = await URL.findOneAndUpdate(
             { shortID },
             {
                 $push: {
                     visitHistory: {
-                        timeStamp: new Date()
+                        timeStamp: new Date(),
+                        ipAddress: req.headers['x-forwarded-for'] || req.ip,
+                        device: `${result.os.name || 'Unknown'} ${result.os.version || ''}`.trim(),
+                        browser:  result.browser.name || 'Unknown',
                     }
                 }
             },
