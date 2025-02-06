@@ -1,4 +1,5 @@
 const express = require('express');
+const path = require('path');
 
 const {connectMongoDB} = require('./connection');
 
@@ -11,33 +12,23 @@ const app = express();
 const url = 'mongodb://127.0.0.1:27017/short-url';
 connectMongoDB(url);
 
+//set view engine and path to ejs files
+app.set('view engine', 'ejs');
+app.set('views',path.resolve('./views'));
+
 //middleware
 app.use(express.json());
 
 //initialize router
 app.use('/url',urlRoute);
 
-//simple rendering 
-app.get('/test', async (req,res) => {
+//server side rendering using ejs templating
+app.get('/home', async (req,res) => {
     const URL = require('./models/Url');
     const allURLs = await URL.find({});
-    return res.end(
-        `
-        <html>
-            <head>
-                <title>Short URLs</title>
-            </head>
-            <body>
-                <h1>All Short URLs</h1>
-                <ol>
-                    ${allURLs.map(shortUrl => 
-                        `<li>${shortUrl.shortID} - ${shortUrl.redirectURL} - ${shortUrl.visitHistory.length}</li>`
-                    ).join('')}
-                </ol>
-            </body>
-        </html>
-        `
-    );
+    return res.render('home', {
+        urls: allURLs,
+    });
 });
 
 //start the server
