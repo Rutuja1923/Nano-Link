@@ -30,6 +30,10 @@ const urlSchema  = new Schema(
                 },
             }
         ],
+        createdBy: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "users",
+        }
     },
     {
         timestamps: true,
