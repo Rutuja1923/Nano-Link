@@ -3,11 +3,18 @@ const express = require('express');
 const router = express.Router();
 
 router.get('/', (req, res) => {
-    const id = req.query.id || null;
     return res.render('home', { 
         id: req.query.id || null,
         url: req.query.url || '', 
     });
+});
+
+router.get('/signup', (req,res) => {
+    return res.render('signup');
+});
+
+router.get('/login', (req,res) => {
+    return res.render('login');
 });
 
 module.exports = router;
