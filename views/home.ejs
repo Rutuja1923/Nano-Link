@@ -3,14 +3,44 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nano Link</title>
+    <title>NanoLink - URL Shortener</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 </head>
-<body>
-    <h1>Hey! Welcome to Nano Link!</h1>
-    <ol>
-        <% urls.forEach(url => { %>
-        <li><%= url.shortID %></li>  
-        <% }); %>
-    </ol>  
+<body class="dark-theme">
+    <header>
+        <h1>NanoLink</h1>
+        <p>Paste your long URL below and get a shortened version instantly. Shortened URLs are easier to share, save space, and look cleaner!</p>
+        <button id="theme-toggle">
+            <i class="fas fa-moon"></i>
+        </button>
+    </header>
+
+    <main>
+        <form class="form-container" method = "POST" action="/url">
+            <input type="text" id="long-url" name="url" 
+                placeholder="Enter your long URL here" 
+                value="<%= typeof url !== 'undefined' ? url : '' %>"
+            >
+            <button id="shorten-btn" type = "submit">Shorten It!</button>
+        </form>
+
+        <div class="output-container" id="output-container">
+            <% if (id) { %>
+                <input type="text" id="shortened-url" value="http://localhost:3000/url/<%= id %>" readonly>
+                <button id="copy-btn">
+                    <i class="fas fa-copy"></i> Copy
+                </button>
+                <button id="reset-btn">
+                    <i class="fas fa-redo"></i> Reset
+                </button>
+            <% } %>
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2025 NanoLink. All Rights Reserved.</p>
+    </footer>
+    <script src="/js/script.js"></script>
 </body>
 </html>
