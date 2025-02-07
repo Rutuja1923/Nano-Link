@@ -10,7 +10,7 @@ const staticRoute = require('./routes/staticRouter');
 const userRoute = require('./routes/user');
 
 //require middleware
-const {restrictToLoggedinUserOnly} = require('./middlewares/auth');
+const {restrictToLoggedinUserOnly, checkAuth} = require('./middlewares/auth');
 
 const PORT = 3000;
 const app = express(); // express application object
@@ -33,7 +33,7 @@ app.use(cookieParser());
 
 //initialize router
 app.use('/url', restrictToLoggedinUserOnly, urlRoute);
-app.use('/',staticRoute);
+app.use('/', checkAuth, staticRoute);
 app.use('/user',userRoute);
 
 //start the server
