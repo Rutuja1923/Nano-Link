@@ -100,6 +100,7 @@ button:hover {
 .output-container {
     display: flex;
     align-items: center;
+    justify-content: center;
     gap: 10px;
     margin-top: 20px;
     flex-direction: row;
@@ -114,4 +115,62 @@ footer {
     position: absolute;
     bottom: 10px;
     font-size: 0.9rem;
+}
+
+/* Analytics Container */
+.analytics-container {
+    width: 80%;
+    margin: 20px auto;
+    text-align: center;
+}
+
+/* Table Styling */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    background: rgba(255, 255, 255, 0.1);
+    color: #ffffff;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+}
+
+/* Table Caption */
+caption {
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin-bottom: 10px;
+    color: #ff9800;
+}
+
+/* Table Headers */
+thead {
+    background: #ff9800;
+    color: #121212;
+}
+
+th, td {
+    padding: 12px;
+    text-align: center;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+/* Alternate Row Color */
+tbody tr:nth-child(even) {
+    background: rgba(255, 255, 255, 0.05);
+}
+
+/* Hover Effect */
+tbody tr:hover {
+    background: rgba(255, 255, 255, 0.15);
+}
+
+/* Responsive Table */
+@media (max-width: 768px) {
+    table {
+        font-size: 0.9rem;
+    }
+    th, td {
+        padding: 8px;
+    }
 }
