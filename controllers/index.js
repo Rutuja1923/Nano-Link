@@ -6,30 +6,43 @@ async function handleGenerateNewShortURL(req,res) {
     try {
         const body = req.body;
         if (!body.url) {
-            return res.status(400).json(
+            // return res.status(400).json(
+            //     {
+            //         status : "error",
+            //         message : "URL is required"
+            //     }
+            // );
+            return res.render('home');
+        }
+
+        //check if the URL already exists in the database
+        let existingEntry = await URL.findOne(
+            { redirectURL: body.url }
+        );
+        let shortID;
+        if (existingEntry) {        //if the url exists, the corresponding short id is returned instead of creating new one.
+            shortID = existingEntry.shortID;
+        }
+        else {
+            shortID = nanoid(8);
+            await URL.create(
                 {
-                    status : "error",
-                    message : "URL is required"
+                    shortID: shortID,
+                    redirectURL: body.url,
+                    visitHistory: []
                 }
             );
         }
 
-        const shortID = nanoid(8);
-        await URL.create(
-            {
-                shortID: shortID,
-                redirectURL: body.url,
-                visitHistory: []
-            }
-        );
-
-        return res.status(201).json(
-            {
-                status : "success",
-                message : "Short ID generated",
-                id: shortID
-            }
-        );    
+        // return res.status(201).json(
+        //     {
+        //         status : "success",
+        //         message : "Short ID generated",
+        //         id: shortID
+        //     }
+        // ); 
+        
+        return res.redirect(`/?id=${shortID}&url=${encodeURIComponent(body.url)}`);
     }
     catch (error) {
         console.error("Error generating short URL:", error);
