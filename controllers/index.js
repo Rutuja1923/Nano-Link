@@ -17,7 +17,10 @@ async function handleGenerateNewShortURL(req,res) {
 
         //check if the URL already exists in the database
         let existingEntry = await URL.findOne(
-            { redirectURL: body.url }
+            { 
+                redirectURL: body.url,
+                createdBy: req.user._id, 
+            }
         );
         let shortID;
         if (existingEntry) {        //if the url exists, the corresponding short id is returned instead of creating new one.
@@ -29,7 +32,8 @@ async function handleGenerateNewShortURL(req,res) {
                 {
                     shortID: shortID,
                     redirectURL: body.url,
-                    visitHistory: []
+                    visitHistory: [],
+                    createdBy: req.user._id,
                 }
             );
         }
