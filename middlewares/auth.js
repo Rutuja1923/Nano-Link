@@ -7,23 +7,34 @@ async function restrictToLoggedinUserOnly(req, res, next) {
         return res.redirect('/login');
     }
 
-    const user = getUser(userUid);
+    try {
+        const user = getUser(userUid);
 
-    if (!user) {
+        if (!user) {
+            return res.redirect('/login');
+        }
+
+        req.user = user;
+        next();
+    } 
+    catch (error) {
+        console.error("Error during token verification:", error);
         return res.redirect('/login');
     }
-
-    req.user = user;
-    next() ;
 }
 
-async function checkAuth(req,res,next) {
+async function checkAuth(req, res, next) {
     const userUid = req.cookies?.uid;
 
-    const user = getUser(userUid);
-    req.user = user;
-    next();
-
+    try {
+        const user = getUser(userUid);
+        req.user = user;
+        next();
+    } 
+    catch (error) {
+        console.error("Error during token verification:", error);
+        return res.status(401).json({ message: 'Invalid or expired token' });
+    }
 }
 
-module.exports = {restrictToLoggedinUserOnly, checkAuth};
+module.exports = { restrictToLoggedinUserOnly, checkAuth };
