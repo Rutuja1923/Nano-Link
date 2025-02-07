@@ -34,6 +34,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     // Copy to Clipboard
+   if (copyBtn) {
     copyBtn.addEventListener("click", async () => {
         try {
             await navigator.clipboard.writeText(shortUrlInput.value);
@@ -46,5 +47,6 @@ document.addEventListener("DOMContentLoaded", () => {
         catch (err) {
             console.error("Failed to copy:", err);
         }
-    });    
+    }); 
+   }   
 });
