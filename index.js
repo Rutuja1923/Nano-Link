@@ -4,6 +4,7 @@ const path = require('path');
 const {connectMongoDB} = require('./connection');
 
 const urlRoute = require('./routes/url');
+const staticRoute = require('./routes/staticRouter');
 
 const PORT = 3000;
 const app = express();
@@ -16,20 +17,16 @@ connectMongoDB(url);
 app.set('view engine', 'ejs');
 app.set('views',path.resolve('./views'));
 
+// Serve static files (CSS, JS)
+app.use(express.static(path.join(__dirname, 'public')));
+
 //middleware
 app.use(express.json());
+app.use(express.urlencoded( {extended: false} ));
 
 //initialize router
 app.use('/url',urlRoute);
-
-//server side rendering using ejs templating
-app.get('/home', async (req,res) => {
-    const URL = require('./models/Url');
-    const allURLs = await URL.find({});
-    return res.render('home', {
-        urls: allURLs,
-    });
-});
+app.use('/',staticRoute);
 
 //start the server
 app.listen(PORT, () => {
