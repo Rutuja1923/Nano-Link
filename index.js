@@ -1,3 +1,4 @@
+require("dotenv").config();
 const express = require('express');
 const path = require('path');
 const cookieParser = require('cookie-parser');
@@ -10,7 +11,7 @@ const staticRoute = require('./routes/staticRouter');
 const userRoute = require('./routes/user');
 
 //require middleware
-const {restrictToLoggedinUserOnly, checkAuth} = require('./middlewares/auth');
+const {checkForAuthentication, restrictTo} = require('./middlewares/auth');
 
 const PORT = 3000;
 const app = express(); // express application object
@@ -30,10 +31,16 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.json());
 app.use(express.urlencoded( {extended: false} ));
 app.use(cookieParser());
+app.use(checkForAuthentication);
+
+app.use((req, res, next) => {
+    res.locals.user = req.user || null;
+    next();
+});
 
 //initialize router
-app.use('/url', restrictToLoggedinUserOnly, urlRoute);
-app.use('/', checkAuth, staticRoute);
+app.use('/url', restrictTo(["NORMAL", "ADMIN"]), urlRoute);
+app.use('/', staticRoute);
 app.use('/user',userRoute);
 
 //start the server
