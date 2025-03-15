@@ -1,70 +1,92 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>NanoLink - URL Shortener</title>
-    <link rel="stylesheet" href="/css/style.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-</head>
-<body class="dark-theme">
+    <link rel="stylesheet" href="/css/style.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+    />
+  </head>
+  <body class="dark-theme">
     <header>
+      <div class="header-left">
         <h1>NanoLink</h1>
-        <p>Paste your long URL below and get a shortened version instantly. Shortened URLs are easier to share, save space, and look cleaner!</p>
+        <p>
+          Paste your long URL below and get a shortened version instantly.
+          Shortened URLs are easier to share, save space, and look cleaner!
+        </p>
+      </div>
+      <div class="header-right">
+        <% if (user) { %>
+        <p class="welcome-msg">Welcome Back, <%= user.name %></p>
+        <a href="/logout" class="auth-btn">Logout</a>
+        <% } else { %>
+        <a href="/login" class="auth-btn">Login</a>
+        <a href="/signup" class="auth-btn">Sign Up</a>
+        <% } %>
         <button id="theme-toggle">
             <i class="fas fa-moon"></i>
         </button>
+      </div>
     </header>
 
     <main>
-        <form class="form-container" method = "POST" action="/url">
-            <input type="text" id="long-url" name="url" 
-                placeholder="Enter your long URL here" 
-                value="<%= typeof url !== 'undefined' ? url : '' %>"
-            >
-            <button id="shorten-btn" type = "submit">Shorten It!</button>
-        </form>
+      <form class="form-container" method="POST" action="/url">
+        <input
+          type="text"
+          id="long-url"
+          name="url"
+          placeholder="Enter your long URL here"
+          value="<%= typeof url !== 'undefined' ? url : '' %>"
+        />
+        <button id="shorten-btn" type="submit">Shorten It!</button>
+      </form>
 
-        <div class="output-container" id="output-container">
-            <% if (id) { %>
-                <input type="text" id="shortened-url" value="http://localhost:3000/url/<%= id %>" readonly>
-                <button id="copy-btn">
-                    <i class="fas fa-copy"></i> Copy
-                </button>
-                <button id="reset-btn">
-                    <i class="fas fa-redo"></i> Reset
-                </button>
-            <% } %>
-        </div>
+      <div class="output-container" id="output-container">
+        <% if (id) { %>
+        <input
+          type="text"
+          id="shortened-url"
+          value="http://localhost:3000/url/<%= id %>"
+          readonly
+        />
+        <button id="copy-btn"><i class="fas fa-copy"></i> Copy</button>
+        <button id="reset-btn"><i class="fas fa-redo"></i> Reset</button>
+        <% } %>
+      </div>
 
-        <div class="analytics-container">
-            <%if (locals.urls) %>
-                <table>
-                    <caption>Analytics</caption>
-                    <thead>
-                        <th>Sl. No</th>
-                        <th>ShortID</th>
-                        <th>Redirect URL</th>
-                        <th>Clicks</th>
-                    </thead>
-                    <tbody>
-                        <% urls.forEach((url,index) => { %>
-                            <tr>
-                                <td><%= index+1 %></td>
-                                <td><%= url.shortID %></td>
-                                <td><%= url.redirectURL %></td>
-                                <td><%= url.visitHistory.length %></td>
-                            </tr>
-                        <% }); %>
-                    </tbody>
-                </table>
-        </div>
-
+      <div class="analytics-container">
+        <%if (locals.urls) %>
+        <table>
+          <caption>
+            Analytics
+          </caption>
+          <thead>
+            <th>Sl. No</th>
+            <th>ShortID</th>
+            <th>Redirect URL</th>
+            <th>Clicks</th>
+          </thead>
+          <tbody>
+            <% urls.forEach((url,index) => { %>
+            <tr>
+              <td><%= index+1 %></td>
+              <td><%= url.shortID %></td>
+              <td><%= url.redirectURL %></td>
+              <td><%= url.visitHistory.length %></td>
+            </tr>
+            <% }); %>
+          </tbody>
+        </table>
+      </div>
     </main>
 
     <footer>
-        <p>&copy; 2025 NanoLink. All Rights Reserved.</p>
+      <p>&copy; 2025 NanoLink. All Rights Reserved.</p>
     </footer>
     <script src="/js/script.js"></script>
-</body>
+  </body>
 </html>
